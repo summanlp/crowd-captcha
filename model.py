@@ -1,8 +1,10 @@
 from peewee import *
 from uuid import uuid4
+import yaml
 
+db_config = yaml.load(open('db.yml'))
 
-db = SqliteDatabase('captcha.db')   # TODO: change to mysql.
+db = PostgresqlDatabase('crowd_captcha', user=db_config["user"], password=db_config["password"])   # TODO: change to mysql.
 
 
 class DatabaseModel(Model):
@@ -14,7 +16,7 @@ class Application(DatabaseModel):
     """ This represents the applications that use the system.
     An application can't make requests to the app unless it's
     registered.
-    
+
     uuid: the id of the application.
     name: the common, human readable name of the application.
     secret: the password that the application will use to validate the
@@ -28,7 +30,7 @@ class Application(DatabaseModel):
 
 class Text(DatabaseModel):
     """ This entity stores the texts to be served to the users.
-    
+
     uuid: the id of the text.
     text: the text.
     source: the source from where the text was retrieved (for instance,
@@ -41,10 +43,10 @@ class Text(DatabaseModel):
     source = CharField()
     created = DateField()
 
-  
+
 class Tag(DatabaseModel):
     """ These are the instances of the user submitted tags.
-    
+
     uuid: the id of the tag.
     application_uuid: the uuid of the application that showed the user
       a given text.
@@ -64,27 +66,32 @@ class Tag(DatabaseModel):
     secret_uuid = UUIDField()
     created = DateField()
     validated = BooleanField()
-    
+
     # TODO: add foreign keys for application_uuid, text_uuid, and
     #       secret_uuid.
 
 
 class Secret(DatabaseModel):
     """ This stores the secrets given to users to pass the captcha.
-    
+
     uuid: the uuid of the secret.
     text_uuid: the uuid of the text.
     user_id: an identifier to map whose submittion it was.
     expiration: the expiration date of the secret.
     validated: holds whether the form was submitted after the tag was
       recorded.
-    
+
     """
     uuid = UUIDField(default=uuid4, primary_key=True)
     application_uuid = UUIDField()
     text_uuid = UUIDField()
     user_id = CharField()
-    valid_until = DateField()
+    expiration = DateField()
     validated = BooleanField()
-    
+
     # TODO: add foreign keys for application_uuid and text_uuid.
+
+
+def create_tables():
+    with db:
+        db.create_tables([Application, Text, Tag, Secret, Tweet])
