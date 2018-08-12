@@ -1,6 +1,6 @@
-from flask import Flask
+from flask import Flask, request, Response
 from model import *
-from question import get_questions
+from question import *
 import uuid
 import datetime
 
@@ -21,7 +21,10 @@ def js():
     Returns:
       - a valid JS with questions.
     """
-    # buscar app uuid
+    app_uuid = request.args["app_uuid"]
+    if not Application.is_valid(app_uuid):
+        abort(401)
+
     return get_js(app_uuid)
 
 
@@ -41,8 +44,16 @@ def tag():
     Returns:
       - a secret uuid to be validated later.
     """
-    create_tags()
-    return create_secret()
+    data = request.get_json(force=True)
+    app_uuid = data["app_uuid"]
+    user_id = data["user_id"]
+    tags = data["tags"]
+
+    if not Application.is_valid(app_uuid):
+        abort(401)
+
+    create_tags(app_uuid, user_id, tags)
+    return create_secret(app_uuid)
 
 
 @app.route('/api/v1/validate', methods=["POST"])
@@ -50,7 +61,7 @@ def validate():
     """
     Takes
       - an application uuid
-      - a user id
+      - an application secret
       - a secret
 
     Does:
@@ -61,7 +72,23 @@ def validate():
     Returns:
       - whether the secret was valid or not.
     """
-    return validate_captcha()
+    data = request.get_json(force=True)
+    secret = data["secret"]
+    app_uuid = data["app_uuid"]
+    app_secret = data["app_secret"]
+
+    Application.auth(app_uuid, app_secret)
+    if not Secret.is_valid(secret, app_uuid):
+        abort(401)
+
+    validate_captcha(secret, app_uuid)
+    return ""
+
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return Response('Contraseña, capo.', 401, {'WWWAuthenticate':'Basic realm="Login Required"'})
+
 
 
 if __name__ == "__main__":

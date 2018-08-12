@@ -28,7 +28,23 @@ class Application(DatabaseModel):
 
     uuid = UUIDField(default=uuid4, primary_key=True)
     name = CharField()
-    secret = CharField()
+    secret = CharField()  # TODO: encriptar.
+
+    @classmethod
+    def auth(Application, uuid, secret):
+        return (Application
+                    .select()
+                    .where(Application.uuid == uuid &
+                           Application.secret == secret)
+                    .count() == 1)
+
+
+    @classmethod
+    def is_valid(Application, uuid):
+        return (Application
+                    .select()
+                    .where(Application.uuid == uuid)
+                    .count() == 1)
 
 
 class Text(DatabaseModel):
@@ -87,19 +103,22 @@ class Secret(DatabaseModel):
     expiration = DateTimeField()
     validated = BooleanField(default=False)
 
-    def is_valid(secret, app_uuid):
+    @classmethod
+    def is_valid(Secret, secret, app_uuid):
         return (Secret
                 .select()
-                .where(Secret.c.uuid == secret &
-                       Secret.c.application_uuid == app_uuid &
-                       Secret.c.expiration <= datetime.now() &
-                       Secret.c.validated == False)
+                .where(Secret.uuid == secret &
+                       Secret.application_uuid == app_uuid &
+                       Secret.expiration <= datetime.now() &
+                       Secret.validated == False)
                 .count() > 0)
 
-    def validate(secret):
+    @classmethod
+    def validate(Secret, secret):
         (Secret
             .update({ Secret.validated: True })
-            .where(Secret.c.uuid == secret))
+            .where(Secret.uuid == secret)
+            .execute())
 
     # TODO: add foreign keys for application_uuid and text_uuid.
 
