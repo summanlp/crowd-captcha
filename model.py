@@ -94,4 +94,4 @@ class Secret(DatabaseModel):
 
 def create_tables():
     with db:
-        db.create_tables([Application, Text, Tag, Secret, Tweet])
+        db.create_tables([Application, Text, Tag, Secret])
