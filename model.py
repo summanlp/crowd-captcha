@@ -1,5 +1,6 @@
 from peewee import *
 from uuid import uuid4
+from datetime import datetime
 import yaml
 
 # db_config = yaml.load(open('db.yml'))
@@ -43,7 +44,7 @@ class Text(DatabaseModel):
     uuid = UUIDField(default=uuid4, primary_key=True)
     text = TextField()
     source = CharField()
-    created = DateField()
+    created = DateTimeField(default=datetime.now)
 
 
 class Tag(DatabaseModel):
@@ -66,8 +67,8 @@ class Tag(DatabaseModel):
     user_id = CharField()
     tag = CharField()
     secret_uuid = UUIDField()
-    created = DateField()
-    validated = BooleanField()
+    created = DateTimeField(default=datetime.now)
+    validated = BooleanField(default=False)
 
     # TODO: add foreign keys for application_uuid, text_uuid, and
     #       secret_uuid.
@@ -88,8 +89,8 @@ class Secret(DatabaseModel):
     application_uuid = UUIDField()
     text_uuid = UUIDField()
     user_id = CharField()
-    expiration = DateField()
-    validated = BooleanField()
+    expiration = DateTimeField()
+    validated = BooleanField(default=False)
 
     # TODO: add foreign keys for application_uuid and text_uuid.
 
