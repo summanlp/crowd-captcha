@@ -1,5 +1,6 @@
 from flask import Flask
 from model import *
+from question import get_questions
 import uuid
 import datetime
 
@@ -20,7 +21,8 @@ def js():
     Returns:
       - a valid JS with questions.
     """
-    pass
+    # buscar app uuid
+    return get_js(app_uuid)
 
 
 @app.route('/api/v1/tag', methods=["POST"])
@@ -28,7 +30,7 @@ def tag():
     """
     Takes
       - an application uuid.
-      - a user uuid.
+      - a user id.
       - a list of responses (text_uuid and a tag)
 
     Does:
@@ -39,7 +41,8 @@ def tag():
     Returns:
       - a secret uuid to be validated later.
     """
-    pass
+    create_tags()
+    return create_secret()
 
 
 @app.route('/api/v1/validate', methods=["POST"])
@@ -58,7 +61,7 @@ def validate():
     Returns:
       - whether the secret was valid or not.
     """
-    pass
+    return validate_captcha()
 
 
 if __name__ == "__main__":

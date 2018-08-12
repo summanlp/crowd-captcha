@@ -56,7 +56,6 @@ class Tag(DatabaseModel):
     text_uuid: the uuid of the text.
     user_id: an identifier to map whose submittion it was.
     tag: a string with the tag.
-    secret_uuid: the uuid of the secret.
     timestamp: the date this was submitted.
     validated: holds whether the form was submitted after the tag was
       recorded.
@@ -66,7 +65,6 @@ class Tag(DatabaseModel):
     text_uuid = UUIDField()
     user_id = CharField()
     tag = CharField()
-    secret_uuid = UUIDField()
     created = DateTimeField(default=datetime.now)
     validated = BooleanField(default=False)
 
@@ -78,8 +76,7 @@ class Secret(DatabaseModel):
     """ This stores the secrets given to users to pass the captcha.
 
     uuid: the uuid of the secret.
-    text_uuid: the uuid of the text.
-    user_id: an identifier to map whose submittion it was.
+    application_uuid: the uuid of the application.
     expiration: the expiration date of the secret.
     validated: holds whether the form was submitted after the tag was
       recorded.
@@ -87,10 +84,22 @@ class Secret(DatabaseModel):
     """
     uuid = UUIDField(default=uuid4, primary_key=True)
     application_uuid = UUIDField()
-    text_uuid = UUIDField()
-    user_id = CharField()
     expiration = DateTimeField()
     validated = BooleanField(default=False)
+
+    def is_valid(secret, app_uuid):
+        return Secret
+                .select()
+                .where(Secret.c.uuid == secret &
+                       Secret.c.application_uuid == app_uuid &
+                       Secret.c.expiration <= datetime.now()
+                       Secret.c.validated == False)
+                .count() > 0
+
+    def validate(secret):
+        Secret
+            .update({ Secret.validated: True })
+            .where(Secret.c.uuid == secret)
 
     # TODO: add foreign keys for application_uuid and text_uuid.
 
