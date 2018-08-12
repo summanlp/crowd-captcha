@@ -2,9 +2,11 @@ from peewee import *
 from uuid import uuid4
 import yaml
 
-db_config = yaml.load(open('db.yml'))
+# db_config = yaml.load(open('db.yml'))
+# db = PostgresqlDatabase('crowd_captcha', user=db_config["user"], password=db_config["password"])   # TODO: change to mysql.
 
-db = PostgresqlDatabase('crowd_captcha', user=db_config["user"], password=db_config["password"])   # TODO: change to mysql.
+# Development db.
+db = SqliteDatabase('crowd_captcha.db')
 
 
 class DatabaseModel(Model):
