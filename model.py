@@ -88,18 +88,18 @@ class Secret(DatabaseModel):
     validated = BooleanField(default=False)
 
     def is_valid(secret, app_uuid):
-        return Secret
+        return (Secret
                 .select()
                 .where(Secret.c.uuid == secret &
                        Secret.c.application_uuid == app_uuid &
-                       Secret.c.expiration <= datetime.now()
+                       Secret.c.expiration <= datetime.now() &
                        Secret.c.validated == False)
-                .count() > 0
+                .count() > 0)
 
     def validate(secret):
-        Secret
+        (Secret
             .update({ Secret.validated: True })
-            .where(Secret.c.uuid == secret)
+            .where(Secret.c.uuid == secret))
 
     # TODO: add foreign keys for application_uuid and text_uuid.
 
