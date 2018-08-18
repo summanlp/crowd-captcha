@@ -55,12 +55,14 @@ class Text(DatabaseModel):
     source: the source from where the text was retrieved (for instance,
       the twitter url.
     created: the date when it was created.    
+    completed: whether the text has sufficient ratings or needs to be served
     """
 
     uuid = UUIDField(default=uuid4, primary_key=True)
     text = TextField()
     source = CharField()
     created = DateTimeField(default=datetime.now)
+    completed = BooleanField(default=False)
 
 
 class Tag(DatabaseModel):
@@ -77,14 +79,14 @@ class Tag(DatabaseModel):
       recorded.
     """
     uuid = UUIDField(default=uuid4, primary_key=True)
-    application_uuid = UUIDField()
-    text_uuid = UUIDField()
+    application_uuid = ForeignKeyField(Application)
+    text_uuid = ForeignKeyField(Text)
     user_id = CharField()
     tag = CharField()
     created = DateTimeField(default=datetime.now)
     validated = BooleanField(default=False)
 
-    # TODO: add foreign keys for application_uuid, text_uuid, and
+    # TODO: add foreign keys for
     #       secret_uuid.
 
 
