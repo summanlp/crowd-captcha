@@ -2,7 +2,7 @@ from flask import render_template, abort
 
 from datetime import datetime, timedelta
 from model import *
-
+from jsmin import jsmin
 
 # TODO: put in a .yml file
 NUM_QUESTIONS = 3
@@ -26,9 +26,10 @@ def get_js(app_uuid):
     """
     slider_css = render_template("slider.css.min")
     modal = render_template("modal.html", questions=get_questions(), slider_css=slider_css)
-    return render_template("captcha.js",
+    js = render_template("captcha.js",
                            modal=modal,
                            app_uuid=app_uuid)
+    return jsmin(js)
 
 def min_diff(vector):
     """ Returns the minimum difference between any two elements in a list.
@@ -39,7 +40,6 @@ def min_diff(vector):
     min_diff = vector[1]-vector[0]
     for i in range(1, len(vector) - 1):
         min_diff = min(min_diff, vector[i+1] - vector[i])
-
     return min_diff
 
 def create_tags(app_uuid, user_id, tags):
