@@ -1,4 +1,6 @@
-from flask import Flask, request, Response
+# -*- coding: utf-8 -*-
+
+from flask import Flask, request, Response, abort
 from model import *
 from question import *
 import uuid
@@ -21,6 +23,9 @@ def js():
     Returns:
       - a valid JS with questions.
     """
+    if "app_uuid" not in request.args:
+        abort(401)
+
     app_uuid = request.args["app_uuid"]
     if not Application.is_valid(app_uuid):
         abort(401)

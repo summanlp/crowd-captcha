@@ -1,0 +1,53 @@
+<style>{{ slider_css }}</style>
+
+<div id="captcha-mod" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>¿Qué tan positivas/negativas son éstas afirmaciones?</h2>
+                        <h3><small>¿Qué es esto?</small></h3>
+                    </div>
+                </div>
+                {% for question in questions %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        {{ question.text }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2">
+                        <div align="right">
+                            <span>-</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <input style="width: 100%" type="range" name="slider_{{question.uuid|replace('-','_')}}" id="slider_id_{{question.uuid|replace('-','_')}}" value="0.0" min="-1.0" max="1.0" step="0.01" oninput="slider_output_id_{{question.uuid|replace('-','_')}}.value = slider_id_{{question.uuid|replace('-','_')}}.value">
+                    </div>
+                    <div class="col-xs-2">
+                        <div align="left">
+                            <span>+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div align="center">
+                        <output name="slider_output_{{question.uuid|replace('-','_')}}" id="slider_output_id_{{question.uuid|replace('-','_')}}">0.0</output>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-xs-2 col-xs-offset-10">
+                        <button id="send-captcha" type="button"
+                        class="btn btn-default">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

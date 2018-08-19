@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from model import *
 
 DEV_APP_UUID = "87c590b0-d62d-4dee-9eaf-36d81ae31939"

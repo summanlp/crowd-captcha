@@ -1,4 +1,4 @@
-from flask import abort
+from flask import render_template, abort
 
 from datetime import datetime, timedelta
 from model import *
@@ -24,9 +24,11 @@ def create_secret(app_uuid):
 def get_js(app_uuid):
     """ Returns the js file with the questions rendered.
     """
-    questions = get_questions()
-    # TODO: implement actual js.
-    return "\n".join(str(text.uuid) + " - " + text.text for text in questions)
+    slider_css = render_template("slider.css.min")
+    modal = render_template("modal.html", questions=get_questions(), slider_css=slider_css)
+    return render_template("captcha.js",
+                           modal=modal,
+                           app_uuid=app_uuid)
 
 def min_diff(vector):
     """ Returns the minimum difference between any two elements in a list.
