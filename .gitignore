@@ -107,4 +107,5 @@ venv.bak/
 db.yml
 *.db
 
-
+# Pycharm.
+.idea
