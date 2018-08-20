@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name=viewport content="width=device-width, initial-scale=1">
+	<title>Crowd-Captcha</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-slider@latest/dist/css/bootstrap-slider.css">
+
+<script src="%%url_for('static', filename='js/vue.js')%%"></script>
+<script src="%%url_for('static', filename='js/vue-resource-1.3.4.js')%%"></script>
+<script src="https://unpkg.com/bootstrap-slider@latest/dist/bootstrap-slider.js"></script>
+<script src="https://unpkg.com/vue-bootstrap-slider@latest/dist/vue-bootstrap-slider.js"></script>
+<script src="%%url_for('static', filename='js/jquery.min.js')%%"></script>
+<script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Oswald:300,400,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'> 
+
+<style type="text/css">
+* {
+	font-family: 'Montserrat', sans-serif;
+}
+.card {
+	font-size: 1em;
+	overflow: hidden;
+	padding: 0;
+	border: none;
+	border-radius: .28571429rem;
+	box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+}
+
+.card-block {
+	font-size: 1em;
+	position: relative;
+	margin: 0;
+	padding: 1em;
+	border: none;
+	border-top: 1px solid rgba(34, 36, 38, .1);
+	box-shadow: none;
+}
+
+.card-img-top {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.card-title {
+	font-size: 1.28571429em;
+	font-weight: 700;
+	line-height: 1.2857em;
+}
+
+.card-text {
+	clear: both;
+	margin-top: .5em;
+	color: rgba(0, 0, 0, .68);
+}
+
+.card-footer {
+	font-size: 1em;
+	position: static;
+	top: 0;
+	left: 0;
+	max-width: 100%;
+	padding: .75em 1em;
+	color: rgba(0, 0, 0, .4);
+	border-top: 1px solid rgba(0, 0, 0, .05) !important;
+	background: #fff;
+}
+
+.card-inverse .btn {
+	border: 1px solid rgba(0, 0, 0, .05);
+}
+
+.slider-selection {
+	position: absolute;
+	background-image: -webkit-linear-gradient(top, #f9f9f9 0%, #f5f5f5 100%);
+	background-image: -o-linear-gradient(top, #f9f9f9 0%, #f5f5f5 100%);
+	background-image: linear-gradient(to bottom, #f9f9f9 0%, #f5f5f5 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff9f9f9', endColorstr='#fff5f5f5', GradientType=0);
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+	box-shadow: inset 0 0px 0 rgba(0, 0, 0, 0);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border-radius: 4px;
+}
+
+.slider.slider-horizontal {
+	width:100% !important;
+}
+
+</style>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12" align="center">
+				<h1 >
+					Taggear polaridad
+				</h1>
+			</div>
+		</div>
+		<div id="vue-validate">
+			<div class="row" style="margin:20px">
+				<div class="col-md-12" align="center">
+					<box-item v-bind:item="item" v-if="this.item"></box-item>
+				</div>
+			</div>
+			<div class="row mt-5" style="margin:50px" v-if="item == null">
+				<div class="alert alert-danger">
+					<strong>Error:</strong> No se ha podido obtener un tweet.
+				</div>
+			</div>
+			<div class="row mt-5" style="margin:50px" v-if="submitError === true">
+				<div class="alert alert-danger">
+					<strong>Error:</strong> No se ha podido enviar el score.
+				</div>
+			</div>
+			<div class="row mt-5" style="margin:50px" v-show="item != null">
+				<!-- <div class="col-md-2"></div>
+				-->				<div class="col-md-3 col-sm-3 col-xs-3" align="center"><span class="glyphicon glyphicon-minus"></span></div>
+				<div class="col-md-6 col-sm-6 col-xs-3" align="center">
+					<b-form-slider v-model="score" v-on:slide="RGBSlide" v-on:change="RGBClick" v-bind:min=0 v-bind:max=2 v-bind:step=0.01 v-bind:precision=2 tooltip='always' v-bind:formatter="formatter" trigger-change-event></b-form-slider>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-3" align="center"><span class="glyphicon glyphicon-plus"></span></div>
+				<!-- <div class="col-md-2"></div> -->
+			</div>
+			<div class="row mt-5" style="margin:20px" align="center">
+				<div class="col-md-12" align="center">
+					<button class="btn btn-info" @click="enviar_similaridad();" id="botonEnviar">Enviar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		var percentColors = [
+		{ pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+		{ pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+		{ pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } } ];
+
+		var getColorForPercentage = function(pct) {
+			for (var i = 1; i < percentColors.length - 1; i++) {
+				if (pct < percentColors[i].pct) {
+					break;
+				}
+			}
+			var lower = percentColors[i - 1];
+			var upper = percentColors[i];
+			var range = upper.pct - lower.pct;
+			var rangePct = (pct - lower.pct) / range;
+			var pctLower = 1 - rangePct;
+			var pctUpper = rangePct;
+			var color = {
+				r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+				g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+				b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+			};
+			return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+		    // or output as hex if preferred
+		}  
+
+		Vue.component('box-item', {
+			props: ["item"],
+			template: `
+			<div class="card">
+			<div class="card-body">
+			<p class="card-text">{{this.item.text}}</p>
+			</div>
+			</div>`,
+			methods:{
+			}
+		});
+
+		var app = new Vue({
+			el: '#vue-validate',
+			data() {
+				return {
+					item: null,
+					score: 1.0,
+					submitError: false,
+					formatter: function(x) {return (x-1.0).toFixed(2)},
+					RGBSlide: function(r) {
+						$('.slider-selection').css('background', getColorForPercentage(r/2.0));
+						$('.slider-track-high').css('background', getColorForPercentage(r/2.0));
+						$('.slider-track-low').css('background', getColorForPercentage(r/2.0));
+					},
+					RGBClick: function(values) {
+						$('.slider-selection').css('background', getColorForPercentage(values.newValue/2.0));
+						$('.slider-track-high').css('background', getColorForPercentage(values.newValue/2.0));
+						$('.slider-track-low').css('background', getColorForPercentage(values.newValue/2.0));
+					}
+				}
+			},
+			mounted: function() {
+				$('.slider-selection').css('background', getColorForPercentage(0.5));
+				$('.slider-track-high').css('background', getColorForPercentage(0.5));
+				$('.slider-track-low').css('background', getColorForPercentage(0.5));
+			},
+			created: function() {
+				this.$http.post('/api/item/random', {app_uuid: '87c590b0-d62d-4dee-9eaf-36d81ae31939'}).then( response => {
+					data = JSON.parse(response.bodyText);
+					this.item = data.item;
+					this.score = 1.0;
+				},
+				error_response => {
+					console.log('Error fetching data');
+				});
+			},
+			methods: {
+				enviar_similaridad: function(score) {
+					this.$http.post('/api/item/validate', {
+						id: this.item.id, 
+						score: this.score - 1.0,
+						app_uuid: "87c590b0-d62d-4dee-9eaf-36d81ae31939",
+						user_id: "0"}).then( response => {
+						data = JSON.parse(response.bodyText);
+						this.item = data.item;
+						this.score = 1.0;
+						this.submitError = false;
+					},
+					error_response => {
+						console.log('Error fetching data');
+						this.submitError = true;
+					});
+				}
+			}
+		});
+	</script>
+</body>
+</html>

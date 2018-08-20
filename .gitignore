@@ -104,8 +104,10 @@ venv.bak/
 .mypy_cache/
 
 # Database stuff.
-db.yml
+*.yml
 *.db
+
+*Gemfile.lock
 
 # Pycharm.
 .idea
