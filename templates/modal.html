@@ -34,15 +34,14 @@
                 </div>
                 <div class="row">
                     <div align="center">
-                        <output name="slider_output_{{question.uuid|replace('-','_')}}" id="slider_output_id_{{question.uuid|replace('-','_')}}">0.0</output>
+                        <output name="slider_output_{{question.uuid|replace('-','_')}}" class="captcha-question" id="slider_output_id_{{question.uuid|replace('-','_')}}">0.0</output>
                     </div>
                 </div>
                 {% endfor %}
 
                 <div class="row">
                     <div class="col-xs-2 col-xs-offset-10">
-                        <button id="send-captcha" type="button"
-                        class="btn btn-default">Cerrar</button>
+                        <button id="send-captcha" type="button" class="btn btn-default">Enviar</button>
                     </div>
                 </div>
 

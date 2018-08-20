@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
+from flask import Flask, request, Response, abort, jsonify
+from flask_cors import cross_origin
 
-from flask import Flask, request, Response, abort
-from model import *
 from question import *
-import uuid
-import datetime
 
 app = Flask(__name__)
 
+# TODO: not hardcode this.
+ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5000"
+]
 
 @app.route('/js/crowd-captcha.js')
 def js():
@@ -34,6 +35,7 @@ def js():
 
 
 @app.route('/api/v1/tag', methods=["POST"])
+@cross_origin(origins=ALLOWED_ORIGINS)
 def tag():
     """
     Takes
@@ -58,12 +60,13 @@ def tag():
         abort(401)
 
     if not create_tags(app_uuid, user_id, tags):
-        return "Invalid request\n"
+        abort(401)
 
-    return create_secret(app_uuid)
+    return jsonify(create_secret(app_uuid))
 
 
 @app.route('/api/v1/validate', methods=["POST"])
+@cross_origin(origins=ALLOWED_ORIGINS)
 def validate():
     """
     Takes
