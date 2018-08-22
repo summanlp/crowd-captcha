@@ -21,7 +21,8 @@ def save_tweet(text,out_file)
 			text: text, 
 			uuid: SecureRandom.uuid,
 			source: "twitter",
-			created: Date.today
+			created: Date.today,
+			completed: false
 		}
 
 	if !out_file.nil?

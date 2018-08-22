@@ -25,6 +25,8 @@ out_fp = None
 
 @app.route("/")
 def main():
+    for fafafa in Application.select().dicts():
+        print(fafafa)
     return render_template('index.html')
 
 
@@ -32,10 +34,8 @@ def main():
 def random_items():
     data = request.get_json()
     app_uuid = data["app_uuid"]
-
     if not Application.is_valid(app_uuid):
         abort(401)
-
     random_query = Text().select().order_by(fn.Random())
     text = random_query.get()
 
@@ -51,19 +51,19 @@ def random_items():
 def validate():
     data = request.get_json()
     app_uuid = data["app_uuid"]
-    user_id = data["user_id"]
+    #user_id = data["user_id"]
 
     if not Application.is_valid(app_uuid):
         abort(401)
 
     text_uuid, data_score = data["id"], data["score"]
     Tag.create(application_uuid=app_uuid,
-               user_id=user_id,
+               user_id=0, #reserved for this front
                text_uuid=text_uuid,
-               tag=data_score,
+               score=data_score,
                validated=True)
     return random_items()
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8181, debug=True)
+    app.run(host='0.0.0.0', port=7000, debug=True)

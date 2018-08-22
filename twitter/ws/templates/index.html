@@ -122,11 +122,11 @@
 			</div>
 			<div class="row mt-5" style="margin:50px" v-show="item != null">
 				<!-- <div class="col-md-2"></div>
-				-->				<div class="col-md-3 col-sm-3 col-xs-3" align="center"><span class="glyphicon glyphicon-minus"></span></div>
-				<div class="col-md-6 col-sm-6 col-xs-3" align="center">
+				-->				<div class="col-md- col-sm-1 col-xs-1" align="center"><span class="glyphicon glyphicon-minus"></span></div>
+				<div class="col-md-10 col-sm-10 col-xs-10" align="center">
 					<b-form-slider v-model="score" v-on:slide="RGBSlide" v-on:change="RGBClick" v-bind:min=0 v-bind:max=2 v-bind:step=0.01 v-bind:precision=2 tooltip='always' v-bind:formatter="formatter" trigger-change-event></b-form-slider>
 				</div>
-				<div class="col-md-3 col-sm-3 col-xs-3" align="center"><span class="glyphicon glyphicon-plus"></span></div>
+				<div class="col-md-1 col-sm-1 col-xs-1" align="center"><span class="glyphicon glyphicon-plus"></span></div>
 				<!-- <div class="col-md-2"></div> -->
 			</div>
 			<div class="row mt-5" style="margin:20px" align="center">
@@ -203,7 +203,7 @@
 				$('.slider-track-low').css('background', getColorForPercentage(0.5));
 			},
 			created: function() {
-				this.$http.post('/api/item/random', {app_uuid: '87c590b0-d62d-4dee-9eaf-36d81ae31939'}).then( response => {
+				this.$http.post('/api/item/random', {app_uuid: "9eba0099-058f-4bba-bc36-8b09c7abb73e"}).then( response => {
 					data = JSON.parse(response.bodyText);
 					this.item = data.item;
 					this.score = 1.0;
@@ -217,7 +217,7 @@
 					this.$http.post('/api/item/validate', {
 						id: this.item.id, 
 						score: this.score - 1.0,
-						app_uuid: "87c590b0-d62d-4dee-9eaf-36d81ae31939",
+						app_uuid: "9eba0099-058f-4bba-bc36-8b09c7abb73e",
 						user_id: "0"}).then( response => {
 						data = JSON.parse(response.bodyText);
 						this.item = data.item;

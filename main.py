@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # TODO: not hardcode this.
 ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5000"
+    "http://127.0.0.1:5000",
 ]
 
 @app.route('/js/crowd-captcha.js')
