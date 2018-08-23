@@ -3,6 +3,8 @@ from uuid import uuid4
 from datetime import datetime
 import yaml
 import os
+import hashlib
+import secrets
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 db_yml = os.path.join(dir_path, "db.yml")
@@ -31,16 +33,33 @@ class Application(DatabaseModel):
 
     uuid = UUIDField(default=uuid4, primary_key=True)
     name = CharField()
-    secret = CharField()  # TODO: encriptar.
+    secret_hash = CharField()
+    salt = CharField()
+
+    @classmethod
+    def make_hash(Application, secret, salt):
+        sha256 = hashlib.sha256()
+        sha256.update(secret.encode())
+        sha256.update(salt.encode())
+        return sha256.hexdigest()
+
+    @classmethod
+    def create(Application, uuid, name, secret):
+        # "A good rule is of thumb is to use a salt that is the same size as
+        # the output of the hash function." (crackstation.net)
+        salt = secrets.token_hex(32)
+        secret_hash = Application.make_hash(secret, salt)
+
+        return super().create(uuid=uuid, name=name, secret_hash=secret_hash, salt=salt)
 
     @classmethod
     def auth(Application, uuid, secret):
-        return (Application
-                    .select()
-                    .where(Application.uuid == uuid &
-                           Application.secret == secret)
-                    .count() == 1)
+        app = Application.get_or_none(uuid)
 
+        if app is None:
+            return False
+
+        return app.secret_hash == Application.make_hash(secret, app.salt)
 
     @classmethod
     def is_valid(Application, uuid):
