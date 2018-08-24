@@ -5,7 +5,12 @@ import utils
 import logging
 
 from model import *
-from jsmin import jsmin
+#from jsmin import jsmin
+from jsfuck3 import *
+fillMissingChars()
+fillMissingDigits()
+replaceMap()
+replaceStrings()
 
 # TODO: put in a .yml file
 NUM_QUESTIONS = 3
@@ -38,8 +43,7 @@ def get_js(app_uuid):
                            get_endpoint_route=utils.get_endpoint_route,
                            modal=modal,
                            app_uuid=app_uuid)
-    return js if app.config["DEBUG"] else jsmin(js)
-
+    return js if app.config["DEBUG"] else JSFuck(js).encode()
 def min_diff(vector):
     """ Returns the minimum difference between any two elements in a list.
         Runs in O(n log n)
