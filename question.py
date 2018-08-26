@@ -5,7 +5,7 @@ import utils
 import logging
 
 from model import *
-from jsmin import jsmin
+from slimit import minify
 
 # TODO: put in a .yml file
 NUM_QUESTIONS = 3
@@ -38,7 +38,7 @@ def get_js(app_uuid):
                            get_endpoint_route=utils.get_endpoint_route,
                            modal=modal,
                            app_uuid=app_uuid)
-    return js if app.config["DEBUG"] else jsmin(js)
+    return js if app.config["DEBUG"] else minify(js, mangle=True, mangle_toplevel=True)
 
 def min_diff(vector):
     """ Returns the minimum difference between any two elements in a list.
