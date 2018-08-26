@@ -74,7 +74,7 @@ function bindModalDismiss(form) {
 }
 
 function addSecretToForm(form, secret) {
-    let input = document.createElement("input");
+    var input = document.createElement("input");
     input.setAttribute("type", "hidden");
     input.setAttribute("name", "captcha_secret");
     input.setAttribute("value", secret);
@@ -103,14 +103,14 @@ function configureModal(button) {
 
 (function($) {
     $(function() {
-        let captcha = document.getElementById("captcha");
-        let form = $('#captcha').closest("form");
+        var captcha = document.getElementById("captcha");
+        var form = $('#captcha').closest("form");
         disableFormSubmission(form);
 
-        let button = createButton();
+        var button = createButton();
         captcha.appendChild(button);
 
-        let modal = createModal();
+        var modal = createModal();
         configureModal(button);
         document.body.appendChild(modal);
         bindModalDismiss(form);
