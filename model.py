@@ -108,8 +108,7 @@ class Tag(DatabaseModel):
     created = DateTimeField(default=datetime.now)
     validated = BooleanField(default=False)
 
-    # TODO: add foreign keys for
-    #       secret_uuid.
+    # TODO: add foreign keys for secret_uuid (issue #12).
 
 
 class Secret(DatabaseModel):
@@ -144,7 +143,7 @@ class Secret(DatabaseModel):
             .where(Secret.uuid == secret)
             .execute())
 
-    # TODO: add foreign keys for application_uuid and text_uuid.
+    # TODO: add foreign keys for application_uuid and text_uuid (issue #12).
 
 
 def create_tables():
