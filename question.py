@@ -37,7 +37,8 @@ def get_js(app_uuid):
     js = render_template("captcha.js",
                            get_endpoint_route=utils.get_endpoint_route,
                            modal=modal,
-                           app_uuid=app_uuid)
+                           app_uuid=app_uuid,
+                           num_questions=NUM_QUESTIONS)
     return js if app.config["DEBUG"] else jsmin(js)
 
 def min_diff(vector):
