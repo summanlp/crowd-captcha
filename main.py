@@ -5,7 +5,7 @@ from question import *
 
 app = Flask(__name__)
 
-# TODO: not hardcode this.
+# TODO: not hardcode this (issue #23).
 ALLOWED_ORIGINS = [
     "http://127.0.0.1:5000",
 ]
