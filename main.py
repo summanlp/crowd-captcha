@@ -66,7 +66,6 @@ def tag():
 
 
 @app.route('/api/v1/validate', methods=["POST"])
-@cross_origin(origins=ALLOWED_ORIGINS)
 def validate():
     """
     Takes
@@ -92,7 +91,7 @@ def validate():
         abort(401)
 
     validate_captcha(secret, app_uuid)
-    return ""
+    return jsonify({ "success": True })
 
 
 @app.errorhandler(401)
