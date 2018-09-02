@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3
 
 WORKDIR /app 
 # Copy our current directory.
@@ -14,5 +14,5 @@ EXPOSE 5000
 
 
 # Run app.
-CMD FLASK_APP=main.py flask run
-# CMD gunicorn --bind 0.0.0.0:${PORT} application.app:app
+#CMD FLASK_APP=main.py flask run
+CMD gunicorn --bind 0.0.0.0:5000 main:app
