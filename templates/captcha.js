@@ -17,9 +17,10 @@ clickedSliders = new Set();
 
 function clickSlider(id) {
 	clickedSliders.add(id);
-	if(clickedSliders.size == {{num_questions}}) 
-		$("send-captcha").removeAttr("disabled");
+	if(clickedSliders.size == {{num_questions}})
+		$("#send-captcha").removeAttr("disabled");
 }
+
 function createModal() {
     return `
         {{modal}}
