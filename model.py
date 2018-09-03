@@ -12,7 +12,7 @@ db_config = yaml.load(open(db_yml))
 db = PostgresqlDatabase(db_config["database"],
     user=db_config["user"],
     password=db_config["password"],
-    host="ccdb")   # TODO: change to mysql.
+    host=db_config["host"])   # TODO: change to mysql.
 
 # Development db.
 #db = SqliteDatabase('crowd_captcha.db')
