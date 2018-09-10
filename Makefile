@@ -20,3 +20,6 @@ killall:
 	  docker container kill {container_name}
 	docker ps -a | grep crowd | cut -c 1-6 | xargs -I {imnm} docker rm {imnm}
 	docker network rm ccnet
+
+fill_dev_db:
+	docker exec -it ccweb python /app/dev_setup.py
