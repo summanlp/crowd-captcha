@@ -9,7 +9,10 @@ import secrets
 dir_path = os.path.dirname(os.path.realpath(__file__))
 db_yml = os.path.join(dir_path, "db.yml")
 db_config = yaml.load(open(db_yml))
-db = PostgresqlDatabase(db_config["database"], user=db_config["user"], password=db_config["password"])   # TODO: change to mysql.
+db = PostgresqlDatabase(db_config["database"],
+    user=db_config["user"],
+    password=db_config["password"],
+    host=db_config["host"])
 
 # Development db.
 #db = SqliteDatabase('crowd_captcha.db')
