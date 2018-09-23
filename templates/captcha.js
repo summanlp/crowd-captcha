@@ -97,7 +97,7 @@ function onTagSuccess(form, secret) {
 
 function onTagError() {
     // TODO: implement me.
-    alert("Error, papu.");
+    alert("Error! Seguro sos un bot");
 }
 
 function configureModal(button) {

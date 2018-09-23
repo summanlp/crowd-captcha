@@ -8,6 +8,7 @@ app = Flask(__name__)
 # TODO: not hardcode this (issue #23).
 ALLOWED_ORIGINS = [
     "http://127.0.0.1:5000",
+    "http://localhost:5000"
 ]
 
 @app.route('/js/crowd-captcha.js')
@@ -57,6 +58,9 @@ def tag():
     tags = data["tags"]
 
     if not Application.is_valid(app_uuid):
+        abort(401)
+
+    if not validate_tags(tags):
         abort(401)
 
     if not create_tags(app_uuid, user_id, tags):
