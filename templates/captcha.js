@@ -102,10 +102,7 @@ function onTagError() {
 
 function configureModal(button) {
     $(button).click(function () {
-        $("#captcha-mod").modal({
-            backdrop: 'static',
-            keyboard: false
-        });
+        $("#captcha-mod").modal();
     });
 }
 
