@@ -1,12 +1,14 @@
 FROM python:3
 
 WORKDIR /app 
-# Copy our current directory.
+
+# Copy only the requirements so we can have an image with full dependencies.
+ADD requirements.txt /app
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Now we can copy the rest of the code. 
 ADD . /app
 
-# This will be shown on docker build
-RUN python --version
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # This means that you can access the cointainer's port 80, not that our actual
 # machine will have the port 5000 accessible.
