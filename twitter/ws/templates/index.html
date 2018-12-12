@@ -131,7 +131,7 @@
 			</div>
 			<div class="row mt-5" style="margin:20px" align="center">
 				<div class="col-md-12" align="center">
-					<button class="btn btn-info" @click="enviar_similaridad();" id="botonEnviar">Enviar</button>
+					<button class="btn btn-info" @click="enviar_similaridad();" id="botonEnviar" :disabled="score == 1.0">Enviar</button>
 				</div>
 			</div>
 		</div>
@@ -191,6 +191,7 @@
 						$('.slider-track-low').css('background', getColorForPercentage(r/2.0));
 					},
 					RGBClick: function(values) {
+						$('#botonEnviar').removeAttr("disabled");
 						$('.slider-selection').css('background', getColorForPercentage(values.newValue/2.0));
 						$('.slider-track-high').css('background', getColorForPercentage(values.newValue/2.0));
 						$('.slider-track-low').css('background', getColorForPercentage(values.newValue/2.0));
@@ -198,6 +199,7 @@
 				}
 			},
 			mounted: function() {
+        
 				$('.slider-selection').css('background', getColorForPercentage(0.5));
 				$('.slider-track-high').css('background', getColorForPercentage(0.5));
 				$('.slider-track-low').css('background', getColorForPercentage(0.5));

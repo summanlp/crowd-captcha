@@ -12,7 +12,7 @@ db_config = yaml.load(open(db_yml))
 db = PostgresqlDatabase(db_config["database"],
     user=db_config["user"],
     password=db_config["password"],
-    host=db_config["host"])   # TODO: change to mysql.
+    host=db_config["host"])
 
 # Development db.
 #db = SqliteDatabase('crowd_captcha.db')
@@ -111,8 +111,7 @@ class Tag(DatabaseModel):
     created = DateTimeField(default=datetime.now)
     validated = BooleanField(default=False)
 
-    # TODO: add foreign keys for
-    #       secret_uuid.
+    # TODO: add foreign keys for secret_uuid (issue #12).
 
 
 class Secret(DatabaseModel):
@@ -147,7 +146,7 @@ class Secret(DatabaseModel):
             .where(Secret.uuid == secret)
             .execute())
 
-    # TODO: add foreign keys for application_uuid and text_uuid.
+    # TODO: add foreign keys for application_uuid and text_uuid (issue #12).
 
 
 def create_tables():

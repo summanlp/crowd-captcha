@@ -5,9 +5,10 @@ from question import *
 
 app = Flask(__name__)
 
-# TODO: not hardcode this.
+# TODO: not hardcode this (issue #23).
 ALLOWED_ORIGINS = [
     "http://127.0.0.1:5000",
+    "http://localhost:5000"
 ]
 
 @app.route('/js/crowd-captcha.js')
@@ -59,6 +60,9 @@ def tag():
     if not Application.is_valid(app_uuid):
         abort(401)
 
+    if not validate_tags(tags):
+        abort(401)
+
     if not create_tags(app_uuid, user_id, tags):
         abort(401)
 
@@ -66,7 +70,6 @@ def tag():
 
 
 @app.route('/api/v1/validate', methods=["POST"])
-@cross_origin(origins=ALLOWED_ORIGINS)
 def validate():
     """
     Takes
@@ -92,7 +95,7 @@ def validate():
         abort(401)
 
     validate_captcha(secret, app_uuid)
-    return ""
+    return jsonify({ "success": True })
 
 
 @app.errorhandler(401)

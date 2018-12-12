@@ -13,6 +13,14 @@ String.prototype.toDOM = function() {
   return b;
 };
 
+clickedSliders = new Set();
+
+function clickSlider(id) {
+	clickedSliders.add(id);
+	if(clickedSliders.size == {{num_questions}})
+		$("#send-captcha").removeAttr("disabled");
+}
+
 function createModal() {
     return `
         {{modal}}
@@ -89,15 +97,12 @@ function onTagSuccess(form, secret) {
 
 function onTagError() {
     // TODO: implement me.
-    alert("Error, papu.");
+    alert("Error! Seguro sos un bot");
 }
 
 function configureModal(button) {
     $(button).click(function () {
-        $("#captcha-mod").modal({
-            backdrop: 'static',
-            keyboard: false
-        });
+        $("#captcha-mod").modal();
     });
 }
 
