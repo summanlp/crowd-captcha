@@ -11,12 +11,16 @@ from model import *
 from jsmin import jsmin
 
 import random
+import yaml
 
-# TODO: put in a .yml file
-NUM_QUESTIONS = 3
-MIN_QUESTIONS = 2 # Integrity constraint for Text.completed
-MIN_TAGS = 5
-ERROR_THRESHOLD = 0.05
+with open("questions.yml", "r") as f:
+    config = yaml.load(f)
+
+NUM_QUESTIONS = config["num_questions"]
+# Integrity constraint for Text.completed
+MIN_QUESTIONS = config["min_questions"]
+MIN_TAGS = config["min_tags"]
+ERROR_THRESHOLD = config["error_threshold"]
 
 LOGGER = logging.getLogger("crowd-captcha")
 

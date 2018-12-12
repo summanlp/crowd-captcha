@@ -8,3 +8,4 @@ scipy
 numpy
 gunicorn>=19.9.0
 psycopg2>=2.7.5
+PyYAML
